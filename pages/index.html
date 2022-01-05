@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>busca de estoque</title>
+
+        <link rel="stylesheet" href="style.css" />
+        <script src="script.js" charset="utf-8" defer></script>
+    </head>
+
+    <body>
+        <header>
+
+            <h1>Consulta</h1>
+        
+            <ul id="searchForm">
+                <li>
+                    <label for="queryField">Dado procurado:</label>
+                    <input type="text" id="queryField" placeHolder="digite o id do produto" />
+                </li>
+                <li>
+                    <label for="queryFieldKind">Campo do dado:</label>
+                    <select id="queryFieldKind">
+                        <option value="id">id</option>
+                        <option value="name">nome</option>
+                        <option value="email">e-mail</option>
+                    </select>
+                </li>
+                <li>
+                    <button type="button"
+                    id="sendQueryBtn"
+                    onclick="findItem()"
+                    >Consultar</button>
+                </li>
+            </ul>
+        </header>
+
+        <main>
+
+            <table id="resultTable">
+                <caption>Dados</caption>
+                <thead>
+                    <tr>
+                        <th scope="col" id="resultTable-header1">id</th>
+                        <th scope="col" id="resultTable-header2">Nome</th>
+                        <th scope="col" id="resultTable-header3">e-mail</th>
+                    </tr>
+                </thead>
+                <tbody id="displayResult">
+    
+                </tbody>
+            </table>
+
+        </main>
+        
+        
+    </body>
+</html>

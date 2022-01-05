@@ -1,0 +1,20 @@
+Referências
+fetch API: 
+
+https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch
+https://developers.google.com/web/updates/2015/03/introduction-to-fetch 
+
+exercício:
+
+Crie um projeto que permita a consulta de clientes utilizando AJAX com fetch considerando a seguinte estrutura:
+
+CAMPO	TIPO
+id	    integer
+name	string
+email	string
+
+Observações:
+
+O servidor NodeJS armazenar os dados dos clientes em um array de objetos;
+A consulta deverá ser realizada por meio de uma página web que permita ao usuário a listagem dos clientes por quaisquer dos campos;
+Envie os códigos criados e a imagem que demonstre a realização da consulta realizada e o retorno respectivo.
