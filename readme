@@ -1,20 +1,29 @@
-Referências
-fetch API: 
+Referências:
 
+fetch: 
 https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch
-https://developers.google.com/web/updates/2015/03/introduction-to-fetch 
+
+change event: 
+https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/change_event 
+
+Incremental search:
+https://en.wikipedia.org/wiki/Incremental_search 
+
+Drop list:
+https://www.w3schools.com/tags/tag_select.asp 
+
+setTimeout:
+https://developer.mozilla.org/en-US/docs/Web/API/setTimeout
+
 
 exercício:
 
-Crie um projeto que permita a consulta de clientes utilizando AJAX com fetch considerando a seguinte estrutura:
+1) Adicione mais registros no array de objetos 'CLIENTE' da atividade anterior para que se possa realizar o incremental search para fins de testes.
 
-CAMPO	TIPO
-id	    integer
-name	string
-email	string
+2) Na página do 'front end', criar um campo do tipo 'input text' seguido de um campo do tipo 'select' com os itens que demonstre os atributos de
+pesquisa ('id', 'name', 'email').
 
-Observações:
+3) De acordo com o valor do campo selecionado no 'drop list', adicionar o 'incremental search' caso haja mais de 3 caracteres.
 
-O servidor NodeJS armazenar os dados dos clientes em um array de objetos;
-A consulta deverá ser realizada por meio de uma página web que permita ao usuário a listagem dos clientes por quaisquer dos campos;
-Envie os códigos criados e a imagem que demonstre a realização da consulta realizada e o retorno respectivo.
+4) Adicione um 'timeout' de modo que o intervalo entre pesquisas não seja inferior a 2 segundos, isto é, caso o usuário digite rapidamente e
+realize os eventos de 'change', não poderá permitir que as pesquisas ao servidor sejam realizados em intervalos inferiores a 2 segundos.
