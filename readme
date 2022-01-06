@@ -9,6 +9,8 @@ https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/change_event
 Incremental search:
 https://en.wikipedia.org/wiki/Incremental_search 
 
+(não pode usar datalist - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist )
+
 Drop list:
 https://www.w3schools.com/tags/tag_select.asp 
 
