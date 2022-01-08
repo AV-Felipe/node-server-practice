@@ -3,18 +3,36 @@ const displayResults = document.getElementById('displayResult');
 const searchValueArea = document.getElementById('searchForm-valueArea');
 const inputField = document.getElementById('queryField');
 const inputFieldKind = document.getElementById('queryFieldKind');
+const buttonSendQuery = document.getElementById('sendQueryBtn');
+const liveSearchDropList = document.querySelector('.dropList');
+
+//for obtaining the rendering data from the input field to positon the drop list for the live search
+let dropListPositionReferential = inputField.getBoundingClientRect(); // view: https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
 
 // EVENT LISTENERS
+
+//for executing the search
 inputField.addEventListener('input', startQuerying);
 inputFieldKind.addEventListener('change', checkInputValue);
+buttonSendQuery.addEventListener('click', checkInputValue);
+
+//for displaying the live search drop box
+window.addEventListener('resize', ()=>{liveSearchDropList.style.left = inputField.getBoundingClientRect().x + 'px';})
 
 // GLOBAL VARIABLES
 let inputValue = 0;
+let inputTarget;
+// ON LOAD
+
+//set the initial position for the live search drop box
+liveSearchDropList.style.left = dropListPositionReferential.x + 'px';
 
 // FUNCTIONS
 
 //delays the execution of the live query to accept more input
-async function startQuerying(){
+async function startQuerying(event){
+    //console.log(event.currentTarget.id);
+    inputTarget = event.currentTarget.id;
 
     inputField.removeEventListener('input', startQuerying); //prevents multiple callback executions
     
@@ -36,10 +54,18 @@ async function startQuerying(){
 
 //prepares input value before sending it to the server
 function checkInputValue() {
+    let queryType;
+    if(this.id === undefined){
+        queryType = 'partial';
+    }else{
+        queryType = 'complete';
+    }
+    console.log(queryType);
 
     //clear any output value
     displayResults.innerHTML = "";
     alertMessageHandler('remove');
+    liveSearchDropList.innerHTML = "";
 
     //set used variables
     inputValue = inputField.value;
@@ -84,7 +110,8 @@ function checkInputValue() {
         
     }
 
-    sendQueryToServer(inputValue, inputValueType);
+    console.log(EventTarget);
+    sendQueryToServer2(inputValue, inputValueType, queryType);
 
 }
 
@@ -164,5 +191,64 @@ function generateTableFields (id, name, email) {
             <td>${name}</td>
             <td>${email}</td>
         </tr>
-        `;
+    `;
+}
+
+function sendQueryToServer2(searchString, searchClass, queryType) {
+    //debugger;
+    
+    const bodyData = {value: searchString, valueType: searchClass, queryType: queryType};
+
+    //by default the fetch method perfoms a GET here we will make a post - view https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    fetch(`/live-search`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyData)
+    })
+    .then(
+        function(response){
+            if(response.status !== 200){
+                console.log('deu zica. Status code da resposta:' + response.status);
+                return;
+            }else{
+                response.json()
+                .then(
+                    function(data){
+                        
+                        console.log(data);
+                        if(queryType === 'complete'){
+                            data.forEach(e => {
+                                if(e.id !== undefined){
+                                    document.getElementById("displayResult").innerHTML += generateTableFields(e.id, e.name, e.email);
+                                }
+                            });
+                        }else{
+                            data.forEach(e => {
+                                if(e[searchClass] !== undefined){
+                                    liveSearchDropList.innerHTML += `<li>${e[searchClass]}<input type="hidden" value ="${e[searchClass]}" /></li>`;
+                                }
+                            });
+                        }
+                    }
+                )
+            } 
+        }
+    )
+    .catch(function(err){
+        console.log('Fetch Error :-S', err);
+    });
+    
+
+}
+
+// DROP LIST
+
+function generateSugestionEntry(value) {
+    return `
+        <li>
+        ${value}<input type="hidden" value ="${value}" />
+        </li>
+    `;
 }

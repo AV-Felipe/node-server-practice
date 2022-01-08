@@ -1,4 +1,8 @@
 /* GENERAL RULES */
+html {
+    font-size: 100%;
+}
+
 body {
     background-color: silver;
     min-width: 320px;
@@ -7,10 +11,11 @@ body {
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 header {
-    background-color: white;
+    background-color: whitesmoke;
     width: 100%;
     padding: 5px;
     display: flex;
@@ -40,6 +45,18 @@ main {
         row-gap: 10px;
     }
 }
+
+/* DROP LIST */
+.dropList {
+    width: 11.3125rem;
+    list-style: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 10, 0.5);
+    padding: 2px;
+    border-radius: 4px;
+}
+
 
 /* RESULT TABLE */
 #resultTable caption {
