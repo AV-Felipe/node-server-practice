@@ -22,8 +22,8 @@ window.addEventListener('resize', ()=>{liveSearchDropList.style.left = inputFiel
 // GLOBAL VARIABLES
 let inputValue = 0;
 let inputTarget;
-// ON LOAD
 
+// ON LOAD
 //set the initial position for the live search drop box
 liveSearchDropList.style.left = dropListPositionReferential.x + 'px';
 
@@ -156,33 +156,61 @@ function countNumbersInString(stringValue){
 
 // SERVER COMMUNICATION
 
-//fetch content from server
+//POST request - route /live-search - fetch content from server
+function sendQueryToServer2(searchString, searchClass, queryType) {
+    
+    //create object with data to be passed as json
+    const bodyData = {value: searchString, valueType: searchClass, queryType: queryType};
 
-function sendQueryToServer(searchString, searchClass) {
-
-    fetch(`/stock/?value=${searchString}&field=${searchClass}`)
+    //by default the fetch method perfoms a GET here we will make a post
+    //for that we pass an object as the second argument in the fetch method
+    // containing the desired http method, headers and body- view https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+    fetch(`/live-search`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyData) //generates the json from our object
+    })
     .then(
+
         function(response){
+            //case response status not 200, skip to catch
             if(response.status !== 200){
                 console.log('deu zica. Status code da resposta:' + response.status);
-                return;
+                return(Promise.reject('o servidor não respondeu como esperado'));
             }
 
-            response.json().then(function(data){
-                console.log(data);
+            //case response code 200, parse json into object for next .then input
+            return response.json();
+        }
+    )
+    .then(
+        function(data){
+            
+            console.log(data);
+            if(queryType === 'complete'){
                 data.forEach(e => {
                     if(e.id !== undefined){
                         document.getElementById("displayResult").innerHTML += generateTableFields(e.id, e.name, e.email);
                     }
                 });
-            });
+            }else{
+                data.forEach(e => {
+                    if(e[searchClass] !== undefined){
+                        liveSearchDropList.innerHTML += generateSugestionEntry(e[searchClass]);
+                    }
+                });
+            }
         }
     )
     .catch(function(err){
-        console.log('Fetch Error :-S', err);
+        console.log('Fetch Error : ', err);
     });
+    
 
 }
+
 
 function generateTableFields (id, name, email) {
     return `
@@ -193,57 +221,6 @@ function generateTableFields (id, name, email) {
         </tr>
     `;
 }
-
-function sendQueryToServer2(searchString, searchClass, queryType) {
-    //debugger;
-    
-    const bodyData = {value: searchString, valueType: searchClass, queryType: queryType};
-
-    //by default the fetch method perfoms a GET here we will make a post - view https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    fetch(`/live-search`,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bodyData)
-    })
-    .then(
-        function(response){
-            if(response.status !== 200){
-                console.log('deu zica. Status code da resposta:' + response.status);
-                return;
-            }else{
-                response.json()
-                .then(
-                    function(data){
-                        
-                        console.log(data);
-                        if(queryType === 'complete'){
-                            data.forEach(e => {
-                                if(e.id !== undefined){
-                                    document.getElementById("displayResult").innerHTML += generateTableFields(e.id, e.name, e.email);
-                                }
-                            });
-                        }else{
-                            data.forEach(e => {
-                                if(e[searchClass] !== undefined){
-                                    liveSearchDropList.innerHTML += `<li>${e[searchClass]}<input type="hidden" value ="${e[searchClass]}" /></li>`;
-                                }
-                            });
-                        }
-                    }
-                )
-            } 
-        }
-    )
-    .catch(function(err){
-        console.log('Fetch Error :-S', err);
-    });
-    
-
-}
-
-// DROP LIST
 
 function generateSugestionEntry(value) {
     return `
