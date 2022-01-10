@@ -9,23 +9,25 @@ const liveSearchDropList = document.querySelector('.dropList');
 //for obtaining the rendering data from the input field to positon the drop list for the live search
 let dropListPositionReferential = inputField.getBoundingClientRect(); // view: https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
 
+// GLOBAL VARIABLES
+let inputValue = 0;
+//let inputTarget;
+let receivedData = [];
+let downKeyCounter = 0;
+const toggleDropListDisplay = implementToggleVisibility(liveSearchDropList, receivedData);
+
 // EVENT LISTENERS
 
 //for executing the search
 inputField.addEventListener('input', startQuerying);
-inputField.addEventListener('focus', toggleDropList);
-inputField.addEventListener('blur', toggleDropList);
+inputField.addEventListener('focus', toggleDropListDisplay);
+inputField.addEventListener('blur', toggleDropListDisplay);
 inputFieldKind.addEventListener('change', checkInputValue);
 buttonSendQuery.addEventListener('click', checkInputValue);
 
 
 //for displaying the live search drop box
 window.addEventListener('resize', ()=>{liveSearchDropList.style.left = inputField.getBoundingClientRect().x + 'px';})
-
-// GLOBAL VARIABLES
-let inputValue = 0;
-//let inputTarget;
-let receivedData = [];
 
 // ON LOAD
 //set the initial position for the live search drop box
@@ -37,6 +39,7 @@ liveSearchDropList.style.left = dropListPositionReferential.x + 'px';
 async function startQuerying(event){
     //console.log(event.currentTarget.id);
     //inputTarget = event.currentTarget.id;
+    downKeyCounter = 0;
 
     inputField.removeEventListener('input', startQuerying); //prevents multiple callback executions
     
@@ -200,6 +203,7 @@ function sendQueryToServer2(searchString, searchClass, queryType) {
             
             receivedData = data;
             console.log(receivedData);
+            
             if(queryType === 'complete'){
                 data.forEach(e => {
                     if(e.id !== undefined){
@@ -207,9 +211,11 @@ function sendQueryToServer2(searchString, searchClass, queryType) {
                     }
                 });
             }else{
+                let counter = 0;
                 data.forEach(e => {
                     if(e[searchClass] !== undefined){
-                        liveSearchDropList.innerHTML += generateSugestionEntry(e[searchClass]);
+                        liveSearchDropList.innerHTML += generateSugestionEntry(e[searchClass], counter);
+                        counter++;
                     }
                 });
             }
@@ -233,10 +239,10 @@ function generateTableFields (id, name, email) {
     `;
 }
 
-function generateSugestionEntry(value) {
+function generateSugestionEntry(value, valueCount) {
     return `
-        <li>
-        ${value}<input type="hidden" value ="${value}" />
+        <li id="optionText-${valueCount}">
+        ${value}<input id="option-${valueCount}" type="hidden" value ="${value}" />
         </li>
     `;
 }
@@ -244,33 +250,89 @@ function generateSugestionEntry(value) {
 // GENERAL PURPOSE
 
 
+// closure for implementing an show and hide functionality
+// you set it to a const passing the drop down element (document.getElementById('id'))
+// and use the const as a callback for a focus and a blur event listener in the input element
+function implementToggleVisibility(dropListElement){
+    return (
+        function (evt){
     
-    
-function toggleDropList(evt){
-    
-    let focusState;
-    if(evt.type === 'focus'){
-        focusState = 1;
-    }else{
-        focusState = 0;
-    }
-    
-    let arrayLength = 2;
-    
-    setDisplay();
-    
-    function setDisplay(){
-        if (focusState === 1 && arrayLength > 0){
-            console.log('showing list')
-            liveSearchDropList.style.display = 'block';
-        }else{
-            console.log('not showing list')
-            liveSearchDropList.style.display = 'none';
+            let focusState;
+            if(evt.type === 'focus'){
+                focusState = 1;
+            }else{
+                focusState = 0;
+            }
+            
+            setDisplay();
+            
+            function setDisplay(){
+                if (focusState === 1){
+                    dropListElement.style.display = 'block';
+                }else{
+                    dropListElement.style.display = 'none';
+                }
+            }
+            
+                
         }
-    }
+    )
     
-        
 }
-    
+
+
     
 
+inputField.addEventListener('keydown', x);
+
+
+
+function x(evt){
+
+    //down key
+    if(evt.keyCode == 40){
+
+        if(downKeyCounter > 0) {
+            document.getElementById('optionText-' + (downKeyCounter -1)).style.border = 'none';
+        }else{
+            document.getElementById('optionText-' + (receivedData.length -1)).style.border = 'none';
+        }
+
+        let element = document.getElementById('optionText-' + (downKeyCounter <= (receivedData.length-1) ? (downKeyCounter):0));
+        let elemntValue = document.getElementById('option-0').value;
+
+        console.log(downKeyCounter);
+        element.style.border = "1px solid black";
+
+        if(downKeyCounter < receivedData.length -1){
+            downKeyCounter++;
+        }else{
+            downKeyCounter = 0;
+        }
+
+    }
+    
+    //up key
+    if(evt.keyCode == 38){
+        if(downKeyCounter > 0){
+            downKeyCounter--
+        }else{
+            downKeyCounter = (receivedData.length - 1)
+        }
+
+        if(downKeyCounter > 0) {
+            document.getElementById('optionText-' + (downKeyCounter)).style.border = 'none';
+        }else{
+            document.getElementById('optionText-0').style.border = 'none';
+        }
+
+        let element = document.getElementById('optionText-' + (downKeyCounter !== 0 ? downKeyCounter-1:receivedData.length-1));
+        let elemntValue = document.getElementById('option-0').value;
+
+        console.log(downKeyCounter);
+        element.style.border = "1px solid black";
+        
+
+    }
+    
+}
