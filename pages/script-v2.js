@@ -13,7 +13,6 @@ let dropListPositionReferential = inputField.getBoundingClientRect(); // view: h
 
 //for executing the search
 inputField.addEventListener('input', startQuerying);
-inputField.addEventListener('focusin', showSugestions);
 inputFieldKind.addEventListener('change', checkInputValue);
 buttonSendQuery.addEventListener('click', checkInputValue);
 
