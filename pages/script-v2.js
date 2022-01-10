@@ -13,15 +13,18 @@ let dropListPositionReferential = inputField.getBoundingClientRect(); // view: h
 
 //for executing the search
 inputField.addEventListener('input', startQuerying);
+inputField.addEventListener('focusin', showSugestions);
 inputFieldKind.addEventListener('change', checkInputValue);
 buttonSendQuery.addEventListener('click', checkInputValue);
+
 
 //for displaying the live search drop box
 window.addEventListener('resize', ()=>{liveSearchDropList.style.left = inputField.getBoundingClientRect().x + 'px';})
 
 // GLOBAL VARIABLES
 let inputValue = 0;
-let inputTarget;
+//let inputTarget;
+let receivedData = [];
 
 // ON LOAD
 //set the initial position for the live search drop box
@@ -32,7 +35,7 @@ liveSearchDropList.style.left = dropListPositionReferential.x + 'px';
 //delays the execution of the live query to accept more input
 async function startQuerying(event){
     //console.log(event.currentTarget.id);
-    inputTarget = event.currentTarget.id;
+    //inputTarget = event.currentTarget.id;
 
     inputField.removeEventListener('input', startQuerying); //prevents multiple callback executions
     
@@ -111,7 +114,7 @@ function checkInputValue() {
     }
 
     console.log(EventTarget);
-    sendQueryToServer2(inputValue, inputValueType, queryType);
+    sendQueryToServer2(inputValue.toLowerCase(), inputValueType, queryType);
 
 }
 
@@ -188,7 +191,8 @@ function sendQueryToServer2(searchString, searchClass, queryType) {
     .then(
         function(data){
             
-            console.log(data);
+            receivedData = data;
+            console.log(receivedData);
             if(queryType === 'complete'){
                 data.forEach(e => {
                     if(e.id !== undefined){
@@ -229,3 +233,4 @@ function generateSugestionEntry(value) {
         </li>
     `;
 }
+
