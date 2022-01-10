@@ -13,6 +13,8 @@ let dropListPositionReferential = inputField.getBoundingClientRect(); // view: h
 
 //for executing the search
 inputField.addEventListener('input', startQuerying);
+inputField.addEventListener('focus', toggleDropList);
+inputField.addEventListener('blur', toggleDropList);
 inputFieldKind.addEventListener('change', checkInputValue);
 buttonSendQuery.addEventListener('click', checkInputValue);
 
@@ -116,6 +118,12 @@ function checkInputValue() {
     sendQueryToServer2(inputValue.toLowerCase(), inputValueType, queryType);
 
 }
+
+
+
+    
+
+    
 
 
 //error messages for search value field validadtion
@@ -232,4 +240,37 @@ function generateSugestionEntry(value) {
         </li>
     `;
 }
+
+// GENERAL PURPOSE
+
+
+    
+    
+function toggleDropList(evt){
+    
+    let focusState;
+    if(evt.type === 'focus'){
+        focusState = 1;
+    }else{
+        focusState = 0;
+    }
+    
+    let arrayLength = 2;
+    
+    setDisplay();
+    
+    function setDisplay(){
+        if (focusState === 1 && arrayLength > 0){
+            console.log('showing list')
+            liveSearchDropList.style.display = 'block';
+        }else{
+            console.log('not showing list')
+            liveSearchDropList.style.display = 'none';
+        }
+    }
+    
+        
+}
+    
+    
 
