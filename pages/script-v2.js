@@ -22,8 +22,10 @@ const toggleDropListDisplay = implementToggleVisibility(liveSearchDropList, rece
 inputField.addEventListener('input', startQuerying);
 inputField.addEventListener('focus', toggleDropListDisplay);
 inputField.addEventListener('blur', toggleDropListDisplay);
+inputField.addEventListener('keydown', controlKeysOnInput);
 inputFieldKind.addEventListener('change', checkInputValue);
 buttonSendQuery.addEventListener('click', checkInputValue);
+
 
 
 //for displaying the live search drop box
@@ -248,7 +250,7 @@ function generateTableFields (id, name, email) {
 
 function generateSugestionEntry(value, valueCount) {
     return `
-        <li id="optionText-${valueCount}" onclick="useSugestion(${valueCount})">
+        <li id="optionText-${valueCount}" role="option" onclick="useSugestion(${valueCount})">
         ${value}<input id="option-${valueCount}" type="hidden" value ="${value}" />
         </li>
     `;
@@ -274,11 +276,27 @@ function implementToggleVisibility(dropListElement){
             setDisplay();
             
             function setDisplay(){
-                if (focusState === 1){
-                    dropListElement.style.display = 'block';
-                }else{
-                    dropListElement.style.display = 'none';
-                }
+
+                const modal = document.getElementById('sugestionList');
+
+                let eventReference = (event) => {
+                    const isInside = modal.contains(event.target);
+                    
+                    if (focusState === 1){
+                        dropListElement.style.display = 'block';
+                        document.getElementById('queryFieldCombobox').setAttribute('aria-expanded', 'true');
+                    }else if(focusState === 0 && isInside){
+                        console.log('clicou dentro');
+                    }else{
+                        console.log('clicou fora');
+                        document.removeEventListener('click', eventReference);
+                        document.getElementById('queryFieldCombobox').setAttribute('aria-expanded', 'false');
+                        dropListElement.style.display = 'none';
+                    }
+                };
+
+                document.addEventListener('click', eventReference)
+
             }
             
                 
@@ -288,13 +306,8 @@ function implementToggleVisibility(dropListElement){
 }
 
 
-    
 
-inputField.addEventListener('keydown', x);
-
-
-
-function x(evt){
+function controlKeysOnInput(evt){
 
     //down key
     if(evt.keyCode == 40){

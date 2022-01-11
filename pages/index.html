@@ -18,17 +18,26 @@
 
                 <li id="searchForm-valueArea">
                     <label for="queryField">Dado procurado:</label>
-                    <input type="text" id="queryField" placeHolder="valor a buscar" />
-                    <ul id="sugestionList" class="dropList">
-                        <!--
-                        <li>
-                            teste 1<input type="hidden" value ="teste 1" />
-                        </li>
-                        <li>
-                            teste 2<input type="hidden" value ="teste 1" />
-                        </li>
-                        -->
-                    </ul>
+                    <!--view: https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html-->
+                    <div class="comboboxWrapper" style="display: inline-block;">
+                        <div role="combobox"
+                            aria-expanded="false"
+                            aria-owns="sugestionList"
+                            aria-haspopup="listbox"
+                            id="queryFieldCombobox"
+                        >
+                        <input type="text"
+                            id="queryField"
+                            placeHolder="digite um valor a procurar"
+                            aria-autocomplete="list"
+                            aria-controls="sugestionList"
+                        />
+                        </div>
+                        <ul id="sugestionList"
+                            class="dropList"
+                            role="listbox"></ul>
+                    </div>
+                    
                 </li>
                 <li>
                     <label for="queryFieldKind">Campo do dado:</label>
