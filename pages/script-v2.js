@@ -14,7 +14,7 @@ let inputValue = 0;
 //let inputTarget;
 let receivedData = [];
 let downKeyCounter = 0;
-const toggleDropListDisplay = implementToggleVisibility(liveSearchDropList, receivedData);
+const toggleDropListDisplay = implementToggleVisibility(liveSearchDropList);
 
 // EVENT LISTENERS
 
@@ -219,6 +219,7 @@ function sendQueryToServer2(searchString, searchClass, queryType) {
                         document.getElementById("displayResult").innerHTML += generateTableFields(e.id, e.name, e.email);
                     }
                 });
+                receivedData = [];
             }else{
                 let counter = 0;
                 data.forEach(e => {
@@ -227,6 +228,7 @@ function sendQueryToServer2(searchString, searchClass, queryType) {
                         counter++;
                     }
                 });
+                liveSearchDropList.style.display = 'block';
             }
         }
     )
@@ -282,7 +284,7 @@ function implementToggleVisibility(dropListElement){
                 let eventReference = (event) => {
                     const isInside = modal.contains(event.target);
                     
-                    if (focusState === 1){
+                    if (focusState === 1 && receivedData.length > 0){
                         dropListElement.style.display = 'block';
                         document.getElementById('queryFieldCombobox').setAttribute('aria-expanded', 'true');
                     }else if(focusState === 0 && isInside){

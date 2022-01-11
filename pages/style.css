@@ -52,7 +52,7 @@ main {
 
 /* DROP LIST */
 .dropList {
-    width: 11.3125rem;
+    min-width: 11.3125rem;
     list-style: none;
     position: absolute;
     background-color: white;
