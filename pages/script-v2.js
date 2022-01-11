@@ -167,6 +167,13 @@ function countNumbersInString(stringValue){
 }
 
 
+function useSugestion(sugestionIndex){
+    elemntValue = document.getElementById('option-' + sugestionIndex).value;
+    console.log(elemntValue);
+    inputField.value = elemntValue;
+}
+
+
 // SERVER COMMUNICATION
 
 //POST request - route /live-search - fetch content from server
@@ -241,7 +248,7 @@ function generateTableFields (id, name, email) {
 
 function generateSugestionEntry(value, valueCount) {
     return `
-        <li id="optionText-${valueCount}">
+        <li id="optionText-${valueCount}" onclick="useSugestion(${valueCount})">
         ${value}<input id="option-${valueCount}" type="hidden" value ="${value}" />
         </li>
     `;
@@ -332,6 +339,20 @@ function x(evt){
         console.log(downKeyCounter);
         element.style.border = "1px solid black";
         
+    }
+
+    //enter key
+    if(evt.keyCode == 13){
+        
+        let elemntValue;
+
+        if(downKeyCounter === 0){
+            elemntValue = document.getElementById('option-' + (receivedData.length - 1)).value;
+        }else{
+            elemntValue = document.getElementById('option-' + (downKeyCounter -1)).value;
+        }
+        
+        inputField.value = elemntValue;
 
     }
     
