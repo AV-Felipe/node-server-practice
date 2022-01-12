@@ -6,7 +6,7 @@
         <title>busca de estoque</title>
 
         <link rel="stylesheet" href="style.css" />
-        <script src="script-v2.js" charset="utf-8" defer></script>
+        <script src="script-v3.js" charset="utf-8" defer></script>
     </head>
 
     <body>
@@ -18,7 +18,7 @@
 
                 <li id="searchForm-valueArea">
                     <label for="queryField">Dado procurado:</label>
-                    <!--view: https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html-->
+                    <!-- view: https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html -->
                     <div class="comboboxWrapper" style="display: inline-block;">
                         <div role="combobox"
                             aria-expanded="false"
@@ -35,7 +35,11 @@
                         </div>
                         <ul id="sugestionList"
                             class="dropList"
-                            role="listbox"></ul>
+                            role="listbox">
+                            <li id="optionText-0" role="option">
+                                teste-1<input id="option-0" type="hidden" value ="teste-1" />
+                                </li>
+                        </ul>
                     </div>
                     
                 </li>

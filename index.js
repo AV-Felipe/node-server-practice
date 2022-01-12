@@ -1,5 +1,4 @@
-// neste arquivo estamos recebendo a pesquisa do front pelo método get
-// no arquivo index2.js realizamos o processo pelo método post
+// neste arquivo estamos recebendo a pesquisa do front pelo método post
 
 const express = require('express');
 
