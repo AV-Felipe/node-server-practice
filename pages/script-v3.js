@@ -19,28 +19,30 @@ let amIClicked = 'no';
 
 liveSearchTextInput.addEventListener('focus', liveSearchInterface);
 liveSearchTextInput.addEventListener('blur', liveSearchInterface);
-//liveSearchSugestionsOutput.addEventListener('click', wasClicked);
+liveSearchWrapper.addEventListener('click', liveSearchInterface);
 
 /*
 * FUNCTIONS
 */
 
-function liveSearchInterface(event) {
+async function liveSearchInterface(event) {
     console.log(event.type);
+    console.log(amIClicked);
 
     if(event.type === 'focus' && liveSearchServerData.length > 0){
         console.log('mostrando droplist');
         liveSearchSugestionsOutput.style.display = 'block';
         liveSearchWrapper.setAttribute('aria-expanded', 'true');
-        document.addEventListener('click', getClickArea);
-    } else if(event.type === 'blur' && amIClicked === 'yes'){
-        liveSearchTextInput.value = 'o clique foi dentro';
-        //liveSearchSugestionsOutput.style.display = 'none';
-        //liveSearchWrapper.setAttribute('aria-expanded', 'false');
-        //document.getElementById('searchForm-valueArea').removeEventListener('click', getClickArea);
-    }else if(event.type === 'blur' && amIClicked === 'no'){
-        //liveSearchSugestionsOutput.style.display = 'none';
-        //liveSearchWrapper.setAttribute('aria-expanded', 'false');
+        //document.addEventListener('click', getClickArea);
+    } else if(event.type === 'click' && event.target.id.includes('optionText-')){
+        liveSearchTextInput.value = event.target.innerText;
+        liveSearchSugestionsOutput.style.display = 'none';
+        liveSearchWrapper.setAttribute('aria-expanded', 'false');
+        //ocument.removeEventListener('click', getClickArea);
+    }else if(event.type === 'blur' /*&& amIClicked === 'no'*/){
+        await wasClicked(); //the click event is being processed after the blur, so we fail to get the dropdown element, this delay send the blur event to the queue, giving time for the click to spot something
+        liveSearchSugestionsOutput.style.display = 'none';
+        liveSearchWrapper.setAttribute('aria-expanded', 'false');
         //document.getElementById('searchForm-valueArea').removeEventListener('click', getClickArea);
     }
 }
@@ -48,7 +50,7 @@ function liveSearchInterface(event) {
 
 function wasClicked(event){
     return new Promise((resolve) =>{
-        setTimeout(()=>{resolve(false)},2000)
+        setTimeout(()=>{resolve(false)},135)
     })
 }
 
@@ -70,12 +72,17 @@ function getClickArea(event){
     if(liveSearchWrapper.contains(event.target)){
         amIClicked = 'yes';
         console.log('click inside');
-        liveSearchSugestionsOutput.style.display = 'none';
-        liveSearchWrapper.setAttribute('aria-expanded', 'false');
+        //liveSearchSugestionsOutput.style.display = 'none';
+        //liveSearchWrapper.setAttribute('aria-expanded', 'false');
     }else{
         amIClicked = 'no';
         console.log('click outside')
-        liveSearchSugestionsOutput.style.display = 'none';
-        liveSearchWrapper.setAttribute('aria-expanded', 'false');
+        //liveSearchSugestionsOutput.style.display = 'none';
+        //liveSearchWrapper.setAttribute('aria-expanded', 'false');
     }
+}
+
+function aproach2(event){
+    const x = (event.target.id).toString();
+    console.log(x);
 }
