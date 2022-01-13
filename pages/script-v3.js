@@ -19,70 +19,99 @@ let amIClicked = 'no';
 
 liveSearchTextInput.addEventListener('focus', liveSearchInterface);
 liveSearchTextInput.addEventListener('blur', liveSearchInterface);
-liveSearchWrapper.addEventListener('click', liveSearchInterface);
+liveSearchTextInput.addEventListener('keydown', controlKeysOnInput);
+
 
 /*
 * FUNCTIONS
 */
 
+//CAUTION! In debugger mode, the event bubling is get in different stages for one click, as a result, one click inside the dropdown area will actually follow an click in the document from the previous event (or something like that, the fact is that, even tought this works fine, in debugger it doesn works)
 async function liveSearchInterface(event) {
-    console.log(event.type);
-    console.log(amIClicked);
 
     if(event.type === 'focus' && liveSearchServerData.length > 0){
-        console.log('mostrando droplist');
+        //console.log('mostrando droplist');
         liveSearchSugestionsOutput.style.display = 'block';
         liveSearchWrapper.setAttribute('aria-expanded', 'true');
-        //document.addEventListener('click', getClickArea);
-    } else if(event.type === 'click' && event.target.id.includes('optionText-')){
-        liveSearchTextInput.value = event.target.innerText;
-        liveSearchSugestionsOutput.style.display = 'none';
-        liveSearchWrapper.setAttribute('aria-expanded', 'false');
-        //ocument.removeEventListener('click', getClickArea);
-    }else if(event.type === 'blur' /*&& amIClicked === 'no'*/){
-        await wasClicked(); //the click event is being processed after the blur, so we fail to get the dropdown element, this delay send the blur event to the queue, giving time for the click to spot something
-        liveSearchSugestionsOutput.style.display = 'none';
-        liveSearchWrapper.setAttribute('aria-expanded', 'false');
-        //document.getElementById('searchForm-valueArea').removeEventListener('click', getClickArea);
+
+        
+        document.addEventListener('click', inputClickHandler);
+        
+
+    } else if(event.type === 'blur'){
+        
+        if(event.type === 'blur' && await outsidecontroledPromise.then(result => result === 'Tab')){//!when focus happens by click event, this is resolving in clickOutside
+            outsidecontroledPromise.then(result => console.log('resolved as:' + result))
+            liveSearchSugestionsOutput.style.display = 'none';
+            liveSearchWrapper.setAttribute('aria-expanded', 'false');
+
+            document.removeEventListener('click', inputClickHandler);
+           
+            renewOutsidePromise();
+    
+        }else if(event.type === 'blur' && await outsidecontroledPromise.then(result => result === 'clickInside')){
+            outsidecontroledPromise.then(result => console.log('resolved as:' + result))
+            liveSearchSugestionsOutput.style.display = 'none';
+            liveSearchWrapper.setAttribute('aria-expanded', 'false');
+
+            document.removeEventListener('click', inputClickHandler);
+            
+            renewOutsidePromise();
+
+        }else if(event.type === 'blur' && await outsidecontroledPromise.then(result => result === 'clickOutside')){
+            outsidecontroledPromise.then(result => console.log('resolved as:' + result))
+            liveSearchSugestionsOutput.style.display = 'none';
+            liveSearchWrapper.setAttribute('aria-expanded', 'false');
+
+            document.removeEventListener('click', inputClickHandler);
+            
+            renewOutsidePromise();
+        }
     }
+
+    
 }
 
 
-function wasClicked(event){
-    return new Promise((resolve) =>{
-        setTimeout(()=>{resolve(false)},135)
-    })
-}
 
-async function teste(){
-    if(await wasClicked()){
-        console.log('rodei');
-    }else{
-        console.log('não rodei')
+// test area
+
+let outsideResolve;
+let outsideReject;
+let outsidecontroledPromise = new Promise (function(resolve, reject){
+    outsideResolve = resolve;
+    outsideReject = reject;
+});
+
+function controlKeysOnInput(event){
+    if(event.key === 'Tab'){
+        console.log(event.key);
+        outsideResolve(event.key);
     }
     
-    
 }
 
-
-
-function getClickArea(event){
+function inputClickHandler(event){
     console.log(event.target);
-    console.log(liveSearchWrapper.contains(event.target));
-    if(liveSearchWrapper.contains(event.target)){
-        amIClicked = 'yes';
-        console.log('click inside');
-        //liveSearchSugestionsOutput.style.display = 'none';
-        //liveSearchWrapper.setAttribute('aria-expanded', 'false');
+    
+    if(event.target.id.includes('optionText-')){
+        
+        console.log(event.target.innerText);
+        
+        liveSearchTextInput.value = event.target.innerText;
+        outsideResolve('clickInside');
+        
+    }else if(event.target.id === 'queryField'){
+        console.log('click on queryField')
     }else{
-        amIClicked = 'no';
-        console.log('click outside')
-        //liveSearchSugestionsOutput.style.display = 'none';
-        //liveSearchWrapper.setAttribute('aria-expanded', 'false');
+        outsideResolve('clickOutside')
     }
+    
 }
 
-function aproach2(event){
-    const x = (event.target.id).toString();
-    console.log(x);
+function renewOutsidePromise(){
+    outsidecontroledPromise = new Promise (function(resolve, reject){
+        outsideResolve = resolve;
+        outsideReject = reject;
+    });
 }
