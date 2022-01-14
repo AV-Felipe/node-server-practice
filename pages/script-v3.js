@@ -10,8 +10,16 @@ const liveSearchSugestionsOutput = document.getElementById('sugestionList');
 * GLOBAL VARIABLES
 */
 
-let liveSearchServerData = [{}];
+let liveSearchServerData = [{name: 'teste 1'},{name: 'teste 2'}];
 let amIClicked = 'no';
+
+//promise control related
+let outsideResolve;
+let outsideReject;
+let outsidecontroledPromise = new Promise (function(resolve, reject){
+    outsideResolve = resolve;
+    outsideReject = reject;
+});
 
 /*
 * EVENT LISTENERS
@@ -19,7 +27,7 @@ let amIClicked = 'no';
 
 liveSearchTextInput.addEventListener('focus', liveSearchInterface);
 liveSearchTextInput.addEventListener('blur', liveSearchInterface);
-liveSearchTextInput.addEventListener('keydown', controlKeysOnInput);
+liveSearchTextInput.addEventListener('keydown', controlKeysOnInput); //view: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
 
 
 /*
@@ -76,19 +84,91 @@ async function liveSearchInterface(event) {
 
 // test area
 
-let outsideResolve;
-let outsideReject;
-let outsidecontroledPromise = new Promise (function(resolve, reject){
-    outsideResolve = resolve;
-    outsideReject = reject;
-});
+let liveSearchSugestionIndex = sugestionIndexController();
 
+function sugestionIndexController(){
+    
+    let dataLength = 0;
+    let currentIndex = -1;
+
+    return function (_operation){
+        dataLength = liveSearchServerData.length
+
+        if(_operation !== 'clear' && _operation !== 'increment'){
+            console.log('error: invalid argument');
+            return('error');
+        }
+
+        if (_operation === 'clear'){
+            console.log('clear');
+            currentIndex = 0;
+            dataLength = 0;
+            return('ok');
+        }
+        if (_operation === 'increment'){
+            
+            console.log('increment')
+            if(currentIndex <= dataLength){
+                
+                currentIndex++;
+
+                const highlight = (()=>{
+                    if(currentIndex === dataLength){
+                        currentIndex = 0
+                        return (0);
+                    }else{
+                        return (currentIndex);
+                    }
+                })();
+                
+                const fade = (()=>{
+                    if(currentIndex === 0){
+                        return (dataLength - 1);
+                    }else{
+                        return (currentIndex -1);
+                    }
+                })();
+                
+                const returnValue = {highlight: highlight, fade: fade};
+                
+
+                return(returnValue)
+
+            }
+
+        }
+    }
+}
+
+//keyboard functions on text input field
+//for key values view: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+//for info on keyboardEventKey view: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
 function controlKeysOnInput(event){
     if(event.key === 'Tab'){
         console.log(event.key);
         outsideResolve(event.key);
     }
+
+    if(event.key === 'ArrowDown'){
+        console.log(`apertou ${event.key}`);
+        
+        const index = liveSearchSugestionIndex('increment');
+        console.log(index);
+        const highlightElement = document.getElementById(`optionText-${index.highlight}`);
+        const fadeElement = document.getElementById(`optionText-${index.fade}`);
+
+        highlightElement.style.border = '1px solid black';
+        fadeElement.style.border = 'none';
+        return('ok')
+    }
     
+    if(event.key === 'ArrowUp'){
+        console.log(`apertou ${event.key}`);
+    }
+
+    if (event.key === 'Enter'){
+        console.log(`apertou ${event.key}`);
+    }
 }
 
 function inputClickHandler(event){
