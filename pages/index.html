@@ -16,6 +16,15 @@
         
             <ul id="searchForm">
 
+                <li>
+                    <label for="queryFieldKind">Campo do dado:</label>
+                    <select id="queryFieldKind">
+                        <option value="id">id</option>
+                        <option value="name">nome</option>
+                        <option value="email">e-mail</option>
+                    </select>
+                </li>
+
                 <li id="searchForm-valueArea">
                     <label for="queryField">Dado procurado:</label>
                     <!-- view: https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.1pattern/listbox-combo.html -->
@@ -42,14 +51,7 @@
                     </div>
                     
                 </li>
-                <li>
-                    <label for="queryFieldKind">Campo do dado:</label>
-                    <select id="queryFieldKind">
-                        <option value="id">id</option>
-                        <option value="name">nome</option>
-                        <option value="email">e-mail</option>
-                    </select>
-                </li>
+                
                 <li>
                     <button type="button"
                     id="sendQueryBtn"
