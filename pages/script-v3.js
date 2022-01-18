@@ -213,7 +213,9 @@ function controlKeysOnInput(event){
         const fadeElement = document.getElementById(`optionText-${index.fade}`);
 
         highlightElement.style.border = '1px solid black';
+        highlightElement.setAttribute('aria-selected', 'true');
         fadeElement.style.border = 'none';
+        fadeElement.setAttribute('aria-selected', 'false');
         return('ok')
     }
     
@@ -227,7 +229,9 @@ function controlKeysOnInput(event){
         const fadeElement = document.getElementById(`optionText-${index.fade}`);
 
         highlightElement.style.border = '1px solid black';
+        highlightElement.setAttribute('aria-selected', 'true');
         fadeElement.style.border = 'none';
+        fadeElement.setAttribute('aria-selected', 'false');
         return('ok')
     }
 
