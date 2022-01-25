@@ -64,6 +64,7 @@ async function startQuerying(event){
 //prepares input value before sending it to the server
 function checkInputValue() {
     let queryType;
+    //check if the event comes from a target with an id
     if(this.id === undefined){
         queryType = 'partial';
     }else{

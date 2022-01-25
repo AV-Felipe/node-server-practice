@@ -1,4 +1,9 @@
 /*
+* MODULES
+*/
+import { startQuerying, checkInputValue } from "./modules/query-functions.js";
+
+/*
 * ELEMENTS
 */
 
@@ -12,7 +17,7 @@ const buttonSendQuery = document.getElementById('sendQueryBtn');
 * GLOBAL VARIABLES
 */
 
-let liveSearchServerData = [{name: 'teste 1'},{name: 'teste 2'}];
+let liveSearchServerData = [];
 let amIClicked = 'no';
 
 //functions with local scope variables
@@ -34,6 +39,9 @@ liveSearchTextInput.addEventListener('focus', liveSearchInterface);
 liveSearchTextInput.addEventListener('blur', liveSearchInterface);
 liveSearchTextInput.addEventListener('keydown', controlKeysOnInput); //view: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
 
+liveSearchTextInput.addEventListener('input', startQuerying);
+
+buttonSendQuery.addEventListener('click', checkInputValue);
 
 /*
 * FUNCTIONS
@@ -41,7 +49,7 @@ liveSearchTextInput.addEventListener('keydown', controlKeysOnInput); //view: htt
 
 //CAUTION! In debugger mode, the event bubling is get in different stages for one click, as a result, one click inside the dropdown area will actually follow an click in the document from the previous event (or something like that, the fact is that, even tought this works fine, in debugger it doesn works)
 async function liveSearchInterface(event) {
-
+debugger
     if(event.type === 'focus' && liveSearchServerData.length > 0){
         //console.log('mostrando droplist');
         liveSearchSugestionsOutput.style.display = 'block';
@@ -127,7 +135,7 @@ function sugestionIndexController(){
             currentIndex = -1;
             dataLength = 0;
             const returnValue = currentState;
-            currentState = 'none'
+            currentState = 'none';
             return(returnValue);
         }
 
@@ -223,7 +231,7 @@ function controlKeysOnInput(event){
 
         console.log(`apertou ${event.key}`);
 
-        const index = liveSearchSugestionIndex('increment');
+        const index = liveSearchSugestionIndex('decrement');
         console.log(index);
         const highlightElement = document.getElementById(`optionText-${index.highlight}`);
         const fadeElement = document.getElementById(`optionText-${index.fade}`);
@@ -268,6 +276,8 @@ function inputClickHandler(event){
     }
     
 }
+
+export {liveSearchServerData, liveSearchSugestionIndex}
 
 /*
 * TESTING AREA
