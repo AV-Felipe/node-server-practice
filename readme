@@ -1,31 +1,28 @@
-Referências:
+Orientação:
 
-fetch: 
-https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API/Using_Fetch
+‘body-parser’: 
+https://www.npmjs.com/package/body-parser
+http://expressjs.com/en/resources/middleware/body-parser.html
 
-change event: 
-https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/change_event 
+POST Request in Express:
+https://codeforgeek.com/handle-get-post-request-express-4/
 
-Incremental search:
-https://en.wikipedia.org/wiki/Incremental_search 
-
-(não pode usar datalist - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/datalist )
-
-Drop list:
-https://www.w3schools.com/tags/tag_select.asp 
-
-setTimeout:
-https://developer.mozilla.org/en-US/docs/Web/API/setTimeout
+RESTful API:
+https://restfulapi.net/
+https://gist.github.com/EtienneR/2f3ab345df502bd3d13e
 
 
-exercício:
+ATIVIDADE:
 
-1) Adicione mais registros no array de objetos 'CLIENTE' da atividade anterior para que se possa realizar o incremental search para fins de testes.
+Utilizando o projeto apresentado na aula anterior:
 
-2) Na página do 'front end', criar um campo do tipo 'input text' seguido de um campo do tipo 'select' com os itens que demonstre os atributos de
-pesquisa ('id', 'name', 'email').
+CLIENTE
 
-3) De acordo com o valor do campo selecionado no 'drop list', adicionar o 'incremental search' caso haja mais de 3 caracteres.
+CAMPO	TIPO
+Id	    Integer
+Name	String
+Email	String
 
-4) Adicione um 'timeout' de modo que o intervalo entre pesquisas não seja inferior a 2 segundos, isto é, caso o usuário digite rapidamente e
-realize os eventos de 'change', não poderá permitir que as pesquisas ao servidor sejam realizados em intervalos inferiores a 2 segundos.
+Crie uma interface que permita a consulta, inserção e exclusão de cliente por meio do envio de requisições AJAX utilizando o ‘fetch’. 
+
+Demonstre a realização da consulta, inclusão e exclusão de item.
