@@ -2,6 +2,8 @@
 * MODULES
 */
 import { startQuerying, checkInputValue } from "./modules/query-functions.js";
+import { showNewEntryField } from "./modules/new-entries.js";
+import { showRemoveEntryField } from "./modules/remove-entries.js";
 
 /*
 * ELEMENTS
@@ -12,6 +14,9 @@ const liveSearchTextInput = document.getElementById('queryField');
 const liveSearchSugestionsOutput = document.getElementById('sugestionList');
 
 const buttonSendQuery = document.getElementById('sendQueryBtn');
+
+const buttonCreateEntry = document.getElementById('newEntryBtn');
+const buttonRemoveEntry = document.getElementById('delEntryBtn')
 
 /*
 * GLOBAL VARIABLES
@@ -42,6 +47,9 @@ liveSearchTextInput.addEventListener('keydown', controlKeysOnInput); //view: htt
 liveSearchTextInput.addEventListener('input', startQuerying);
 
 buttonSendQuery.addEventListener('click', checkInputValue);
+
+buttonCreateEntry.addEventListener('click', showNewEntryField);
+buttonRemoveEntry.addEventListener('click', showRemoveEntryField);
 
 /*
 * FUNCTIONS

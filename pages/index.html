@@ -58,6 +58,43 @@
                     >Consultar</button>
                 </li>
 
+                <li>
+                    <button type="button"
+                    id="newEntryBtn"
+                    >Criar cadastro</button>
+                    <ul id="newData">
+                        <li>
+                            <label for="newEntryName">Nome:</label>
+                            <input id="newEntryName" type="text" />
+                        </li>
+                        <li>
+                            <label for="newEntryEmail">E-mail:</label>
+                            <input id="newEntryEmail" type="text" />
+                        </li>
+                        <li>
+                            <button id="createEntry" type="button">Cadastrar</button>
+                            <button id="cancelNewEntry" type="button">Cancelar</button>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <button type="button"
+                    id="delEntryBtn"
+                    >Remover cadastro</button>
+                    <ul id="removeData">
+                        <li>
+                            <label for="removeEntryId">ID:</label>
+                            <input id="removeEntryId" type="text" />
+                        </li>
+                        
+                        <li>
+                            <button id="removeEntry" type="button">Excluir</button>
+                            <button id="cancelRemoveEntry" type="button">Cancelar</button>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
         </header>
 

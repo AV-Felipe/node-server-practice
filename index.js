@@ -4,6 +4,8 @@ const express = require('express');
 
 const app = express();
 
+const fs = require('fs');
+
 const port = process.env.PORT || 3000;
 
 // MOCK DB FILE
@@ -70,6 +72,57 @@ app.post('/live-search', (req, res) => {
 	}
 
 });
+
+// POST response - route /newuser
+app.post('/newuser', (req, res)=>{
+	const newUserName = req.body.name;
+	const newUserMail = req.body.email;
+	//console.log(newUserName + ' ' + newUserMail);
+	
+	const newId = data.length + 1;
+	
+	//console.log(newId)
+	
+	const newUser = {"id": newId,"name":newUserName,"email":newUserMail};
+	//console.log(typeof data);
+	
+	data.push(newUser);
+	console.log(data[1000])
+	const newFileContent = JSON.stringify(data);
+	
+	fs.writeFile('./mock_data.json', newFileContent, err=>{
+        if(err){
+            console.log('Error writing file, ', err);
+        }else{
+            console.log('successfully wrote file');
+            res.status(201);
+            res.send(`${JSON.stringify(newUser)}`);
+        }
+    })
+
+	
+})
+
+app.delete('/removeuser', (req, res)=>{
+	console.log(data.length);
+	const userId = req.query.id;
+	console.log(userId);
+
+	const desiredElement = (data.filter(user => user.id === Number(userId)))[0];
+
+	console.log(desiredElement);
+
+	const desiredIndex = data.indexOf(desiredElement);
+
+	console.log(desiredIndex);
+
+	data.splice(desiredIndex, 1);
+
+	console.log(data.length);
+
+	res.status(200);
+    res.send(`${JSON.stringify(desiredElement)}`);
+})
 
 // custom 404 page
 app.use((req, res) => {
